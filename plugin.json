@@ -1,0 +1,12 @@
+{
+    "ID":"1b7c732781f94b748ed08351f8200894",
+    "ActionKeyword":"tr",
+    "Name":"Direct Translate",
+    "Description":"Translate between any languages supported by textblob",
+    "Author":"Drimix20",
+    "Version":"1.0.0",
+    "Language":"python",
+    "Website":"https://github.com/Drimix20/Flow.Launcher.Plugin.DirectTranslate",
+    "IcoPath":"Images\\app.png",
+    "ExecuteFileName":"main.py"
+}
