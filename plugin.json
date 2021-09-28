@@ -4,9 +4,9 @@
     "Name":"Direct Translate",
     "Description":"Translate between any languages supported by textblob",
     "Author":"Drimix20",
-    "Version":"1.0.0",
+    "Version":"2.0.0",
     "Language":"python",
     "Website":"https://github.com/Drimix20/Flow.Launcher.Plugin.DirectTranslate",
-    "IcoPath":"Images\\app.png",
+    "IcoPath": "assets/favicon.ico",
     "ExecuteFileName":"main.py"
 }
