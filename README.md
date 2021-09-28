@@ -6,11 +6,11 @@ Translate plugin that translates between any languages supported by python textb
 
 #### About
 
-Plugin uses [textblob](https://github.com/sloria/TextBlob) to translate between any supported languages.
+Plugin uses [googletrans](https://github.com/ssut/py-googletrans) to translate between any supported languages.
 
 ### Requirements
 
-Python 3.5 or later installed on your system, with python.exe in your PATH variable and this path updated in the Flow Launcher settings (this is a general requirement to use Python plugins with Flow). As of v1.8, Flow Launcher should take care of the installation of Python for you if it is not on your system.
+Python 3.6 or later installed on your system, with python.exe in your PATH variable and this path updated in the Flow Launcher settings (this is a general requirement to use Python plugins with Flow). As of v1.8, Flow Launcher should take care of the installation of Python for you if it is not on your system.
 
 
 ### Installing

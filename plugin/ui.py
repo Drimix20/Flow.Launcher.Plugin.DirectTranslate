@@ -5,7 +5,7 @@ from typing import List
 
 from flowlauncher import FlowLauncher
 
-from textblob import TextBlob, exceptions
+from googletrans import Translator, constants
 from plugin.templates import *
 
 
@@ -34,11 +34,11 @@ class Main(FlowLauncher):
         self.messages_queue.append(message)
 
     def query(self, param: str) -> List[dict]:
-        q = param.strip()
+        query = param.strip()
 
-        query_modified = q.strip().lower()
+        query_modified = query.strip().lower()
         splitted_params = query_modified.split(' ')
- 
+
 
         if len(splitted_params) < 3:
             self.sendNormalMess(
@@ -49,26 +49,18 @@ class Main(FlowLauncher):
             from_lang = splitted_params[0]
             to_lang = splitted_params[1]
             
-            if query_modified:
-                try:
-                    blob = TextBlob(' '.join(splitted_params[2:]))
-                    translation = blob.translate(from_lang, to_lang)
+            try:
+                translator = Translator()
+                translation = translator.translate(' '.join(splitted_params[2:]), src=from_lang, dest=to_lang)
 
-                    self.sendNormalMess(
-                        str(translation),
-                        q
-                    )
-                except exceptions.NotTranslated:
-                    self.sendNormalMess(
-                        "Query not changed",
-                        q
-                    )
-            # TODO not sure if required to handle it correctly
-            # if not results:
-            #     results.append({
-            #             "Title": 'Not found',
-            #             "SubTitle": query,
-            #             "IcoPath":"Images/app.png"
-            #         })
+                self.sendNormalMess(
+                    str(translation.text),
+                    query
+                )
+            except ValueError as error:
+                self.sendNormalMess(
+                    str(error),
+                    query
+                ) 
 
         return self.messages_queue
