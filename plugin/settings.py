@@ -21,10 +21,10 @@ LOCAL = os.getenv("local", "en")
 
 
 # the information of package
-__package_name__ = "Plugin"
-__version__ = "0.0.1"
-__short_description__ = "DESCRIPTION"
-GITHUB_USERNAME = "USERNAME"
+__package_name__ = "Flow.Launcher.Plugin.DirectTranslate"
+__version__ = "2.0.0"
+__short_description__ = "Translate between any languages supported by Googletrans"
+GITHUB_USERNAME = "Drimix20"
 
 
 readme_path = basedir / "README.md"
@@ -38,10 +38,10 @@ except:
 TRANSLATIONS_PATH = basedir / "plugin/translations"
 
 # plugin.json
-PLUGIN_ID = "uuid"  # could generate via python `uuid` official package
+PLUGIN_ID = "1b7c732781f94b748ed08351f8200894"
 ICON_PATH = "assets/favicon.ico"
-PLUGIN_AUTHOR = "AUTHOR_NAME"
-PLUGIN_ACTION_KEYWORD = "KEYWORD"
+PLUGIN_AUTHOR = "Drimix20"
+PLUGIN_ACTION_KEYWORD = "tr"
 PLUGIN_PROGRAM_LANG = "python"
 PLUGIN_EXECUTE_FILENAME = "main.py"
 PLUGIN_ZIP_NAME = f"{__package_name__}-{__version__}.zip"

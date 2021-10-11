@@ -1,15 +1,15 @@
 # Chinese (Simplified, China) translations for PROJECT.
 # Copyright (C) 2020 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+# FIRST AUTHOR drimalmartin@seznam.cz, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-20 18:05+0800\n"
-"PO-Revision-Date: 2020-09-20 18:05+0800\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: 2.0.0\n"
+"Report-Msgid-Bugs-To: drimalmartin@seznam.cz\n"
+"POT-Creation-Date: 2021-10-11 18:05+0800\n"
+"PO-Revision-Date: 2021-10-11 18:04+0800\n"
+"Last-Translator: Drimix20 drimalmartin@seznam.cz\n"
 "Language: zh_Hans_CN\n"
 "Language-Team: zh_Hans_CN <LL@li.org>\n"
 "Plural-Forms: nplurals=1; plural=0\n"
@@ -18,3 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
+#: plugin/ui.py:62
+msgid "invalid destination language"
+msgstr "无效目的地语言"
+
+#: plugin/ui.py:62
+msgid "invalid source language"
+msgstr "无效源语言"
+
+#: plugin/ui.py:47
+msgid "<Hotkey> <From Language> <To Language> <Text>"
+msgstr "<热键> <從語言> <語言> <文本>"

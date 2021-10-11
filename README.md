@@ -1,12 +1,14 @@
 # Direct Translate (Flow.Launcher.Plugin.DirectTranslate)
 
-Translate plugin that translates between any languages supported by python textblob library for [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher).
+Translate plugin that translates between any languages supported by python googletrans library for [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher).
 
 ![Translate](https://i.imgur.com/mVxnBk1.gif)
 
 #### About
 
+
 Plugin uses [googletrans](https://github.com/ssut/py-googletrans) to translate between any supported languages.
+
 
 ### Requirements
 
@@ -41,7 +43,7 @@ Remember you need to be in the local directory containing the requirements text 
 
 | Keyword                                                          | Description                                 |
 | ---------------------------------------------------------------- | ------------------------------------------- |
-| `tr {from language} {to language} {words to be translated}` | Translate `words to be translated` from `from language` to `to language` currency. Example of usage is `` |
+| `tr {from language} {to language} {words to be translated}` | Translate `words to be translated` from `from language` to `to language` language. Example of usage is `tr en cs hello world` |
 
 ### Problems, errors and feature requests
 
