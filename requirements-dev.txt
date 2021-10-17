@@ -1,3 +1,5 @@
-flowlauncher
+click
 python-dotenv
+babel
+flowlauncher
 googletrans==3.1.0a0
