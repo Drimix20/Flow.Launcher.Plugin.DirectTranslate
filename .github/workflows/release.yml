@@ -22,6 +22,7 @@ jobs:
 
       - name: Set up Environment
         run: |
+          sudo apt-get install -y gettext
           python -m pip install --upgrade pip
           pip install click
 
