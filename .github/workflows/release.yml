@@ -24,7 +24,7 @@ jobs:
         run: |
           sudo apt-get install -y gettext
           python -m pip install --upgrade pip
-          pip install click
+          pip install click babel
           pip install -r ./requirements.txt
 
       - name: Install Dependencies to Local
