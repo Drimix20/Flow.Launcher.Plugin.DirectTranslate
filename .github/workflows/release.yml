@@ -23,6 +23,7 @@ jobs:
       - name: Set up Environment
         run: |
           python -m pip install --upgrade pip
+          pip install click
 
       - name: Install Dependencies
         run: |
