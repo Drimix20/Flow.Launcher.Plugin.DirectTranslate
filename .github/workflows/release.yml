@@ -1,9 +1,11 @@
 name: Build and Publish
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+  # push:
+  #   branches: [ main ]
+  #   paths-ignore: 
+  #     - .github/workflows/*
 
 jobs:
   build-publish:
