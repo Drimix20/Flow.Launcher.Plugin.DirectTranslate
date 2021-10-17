@@ -42,6 +42,14 @@ jobs:
       - name: Pack plugin to a zip file
         run: python commands.py build
 
+      - name: get version
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with: 
+          path: 'plugin.json'
+          prop_path: 'Version'
+      - run: echo ${{ steps.version.outputs.prop }} 
+
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -49,9 +57,9 @@ jobs:
           # This token is provided by Actions
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
+          tag_name: ${{ steps.version.outputs.prop }}
+          release_name: ${{ steps.version.outputs.prop }}
+          draft: true
           prerelease: false
 
       - name: Get Asset name
