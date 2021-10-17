@@ -1,3 +1,4 @@
 flowlauncher
 python-dotenv
+typing
 googletrans==3.1.0a0

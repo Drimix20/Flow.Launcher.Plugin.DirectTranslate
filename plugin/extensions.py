@@ -11,4 +11,4 @@ translation = gettext.translation(
     languages=[LOCAL],
 )
 
-_l = translation.gettext
+_ = translation.gettext

@@ -5,8 +5,9 @@ from typing import List
 
 from flowlauncher import FlowLauncher
 
-from googletrans import Translator, constants
+from googletrans import Translator
 from plugin.templates import *
+from plugin.extensions import _
 
 
 class Main(FlowLauncher):
@@ -43,7 +44,7 @@ class Main(FlowLauncher):
         if len(splitted_params) < 3:
             self.sendNormalMess(
                 "Direct Translate",
-                "<Hotkey> <From Language> <To Language> <Text>"
+                _("<Hotkey> <From Language> <To Language> <Text>")
             )
         else:
             from_lang = splitted_params[0]
@@ -54,12 +55,12 @@ class Main(FlowLauncher):
                 translation = translator.translate(' '.join(splitted_params[2:]), src=from_lang, dest=to_lang)
 
                 self.sendNormalMess(
-                    str(translation.text),
+                    _(str(translation.text)),
                     query
                 )
             except ValueError as error:
                 self.sendNormalMess(
-                    str(error),
+                    _(str(error)),
                     query
                 ) 
 
