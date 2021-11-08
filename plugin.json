@@ -4,7 +4,7 @@
     "Name": "Flow.Launcher.Plugin.DirectTranslate",
     "Description": "Translate between any languages supported by Googletrans",
     "Author": "Drimix20",
-    "Version": "2.0.0",
+    "Version": "2.0.1",
     "Language": "python",
     "Website": "https://github.com/Drimix20/Flow.Launcher.Plugin.DirectTranslate",
     "IcoPath": "assets/favicon.ico",
