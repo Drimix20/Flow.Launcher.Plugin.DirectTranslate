@@ -40,6 +40,10 @@ class Main(FlowLauncher):
         query_modified = query.strip().lower()
         splitted_params = query_modified.split(' ')
 
+        if len(splitted_params) > 1 and len(splitted_params[0]) == 2 and len(splitted_params[1]) != 2:
+            # There is only the destination lang: we can assume that the from lang is "auto"
+            query_modified = f"auto {query_modified}"
+            splitted_params = query_modified.split(' ')
 
         if len(splitted_params) < 3:
             self.sendNormalMess(
