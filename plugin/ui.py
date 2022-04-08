@@ -15,7 +15,8 @@ import locale
 class Main(FlowLauncher):
     messages_queue = []
 
-    def getSystemLanguage(self):
+    @staticmethod
+    def system_lang():
         lang = locale.getdefaultlocale()
         return lang[0][:2] if lang else "en"
 
@@ -44,35 +45,29 @@ class Main(FlowLauncher):
     def valid_lang(lang: str) -> bool:
         return lang in LANGUAGES or lang in SPECIAL_CASES
 
+    def translate(self, src: str, dest: str, query: str):
+        try:
+            translator = Translator()
+            if src == "auto":
+                src = translator.detect(query).lang
+
+            translation = translator.translate(query, src=src, dest=dest)
+            self.sendNormalMess(_(str(translation.text)), f"{query}   [{src} → {dest}]")
+        except ValueError as error:
+            self.sendNormalMess(_(str(error)), f"{query}   [{src} → {dest}]")
+        return self.messages_queue
+
     def query(self, param: str) -> List[dict]:
         query = param.strip().lower()
         params = query.split(" ")
-        cnt_words = len(params)
 
-        if cnt_words <= 1:
-            self.sendNormalMess("Direct Translate", _("<Hotkey> <From Language> <To Language> <Text>"))
-        else:
-            if not self.valid_lang(params[0]):
-                # no lang_code provided: <auto> -> <system default language>
-                lang1, lang2 = "auto", self.getSystemLanguage()
-            else:
-                if not self.valid_lang(params[1]):
-                    # one lang_code provided: <auto> -> lang_code
-                    lang1, lang2 = "auto", params[0]
-                    query = " ".join(params[1:])
-                else:
-                    # 2 lang_codes provided: lang_code -> lang_code
-                    lang1, lang2 = params[:2]
-                    query = " ".join(params[2:])
+        if len(params) <= 1:
+            self.sendNormalMess("direct translate", _("<hotkey> <from language> <to language> <text>"))
+            return self.messages_queue
 
-            try:
-                translator = Translator()
-                if lang1 == "auto":
-                    lang1 = translator.detect(query).lang
-
-                translation = translator.translate(query, src=lang1, dest=lang2)
-                self.sendNormalMess(_(str(translation.text)), f"{query}   [{lang1} → {lang2}]")
-            except ValueError as error:
-                self.sendNormalMess(_(str(error)), query)
-
-        return self.messages_queue
+        # no lang_code: <auto> -> <system language>
+        if not self.valid_lang(params[0]): return self.translate("auto", self.system_lang(), query)
+        # one lang_code: <auto> -> lang_code
+        if not self.valid_lang(params[1]): return self.translate("auto", params[0], " ".join(params[1:]))
+        # 2 lang_codes: lang1 -> lang2
+        return self.translate(params[0], params[1], " ".join(params[2:]))
