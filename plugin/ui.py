@@ -50,18 +50,21 @@ class Main(FlowLauncher):
             translator = Translator()
             if src == "auto":
                 src = translator.detect(query).lang
+                sources = src if isinstance(src, list) else [src]
+            else: sources = [src]
 
-            translation = translator.translate(query, src=src, dest=dest)
-            self.sendNormalMess(_(str(translation.text)), f"{query}   [{src} → {dest}]")
-        except ValueError as error:
-            self.sendNormalMess(_(str(error)), f"{query}   [{src} → {dest}]")
+            for src in sources:
+                translation = translator.translate(query, src=src, dest=dest)
+                self.sendNormalMess(_(str(translation.text)), f"{src} → {dest}   {query}")
+        except Exception as error:
+            self.sendNormalMess(_(str(error)), f"{src} → {dest}   {query}")
         return self.messages_queue
 
     def query(self, param: str) -> List[dict]:
         query = param.strip().lower()
         params = query.split(" ")
 
-        if len(params) <= 1:
+        if len(params) < 1 or len(params[0]) < 2:
             self.sendNormalMess("direct translate", _("<hotkey> <from language> <to language> <text>"))
             return self.messages_queue
 
