@@ -60,17 +60,21 @@ class Main(FlowLauncher):
             self.sendNormalMess(_(str(error)), f"{src} → {dest}   {query}")
         return self.messages_queue
 
+    def help_action(self):
+        self.sendNormalMess("direct translate", _("<hotkey> <from language> <to language> <text>"))
+        return self.messages_queue
+
     def query(self, param: str) -> List[dict]:
         query = param.strip().lower()
         params = query.split(" ")
+        if len(params) < 1 or len(params[0]) < 2: return self.help_action()
 
-        if len(params) < 1 or len(params[0]) < 2:
-            self.sendNormalMess("direct translate", _("<hotkey> <from language> <to language> <text>"))
-            return self.messages_queue
-
-        # no lang_code: <auto> -> <system language>
-        if not self.valid_lang(params[0]): return self.translate("auto", self.system_lang(), query)
-        # one lang_code: <auto> -> lang_code
-        if not self.valid_lang(params[1]): return self.translate("auto", params[0], " ".join(params[1:]))
-        # 2 lang_codes: lang1 -> lang2
-        return self.translate(params[0], params[1], " ".join(params[2:]))
+        try:
+            # no lang_code: <auto> -> <system language>
+            if not self.valid_lang(params[0]): return self.translate("auto", self.system_lang(), query)
+            # one lang_code: <auto> -> lang_code
+            if not self.valid_lang(params[1]): return self.translate("auto", params[0], " ".join(params[1:]))
+            # 2 lang_codes: lang1 -> lang2
+            return self.translate(params[0], params[1], " ".join(params[2:]))
+        except IndexError:
+            self.help_action()
