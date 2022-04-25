@@ -13,33 +13,15 @@ import locale
 
 
 class Main(FlowLauncher):
-    messages_queue = []
+    items = []
 
     @staticmethod
     def system_lang():
         lang = locale.getdefaultlocale()
         return lang[0][:2] if lang else "en"
 
-    def sendNormalMess(self, title: str, subtitle: str):
-        message = copy.deepcopy(RESULT_TEMPLATE)
-        message["Title"] = title
-        message["SubTitle"] = subtitle
-
-        self.messages_queue.append(message)
-
-    def sendActionMess(self, title: str, subtitle: str, method: str, value: List):
-        # information
-        message = copy.deepcopy(RESULT_TEMPLATE)
-        message["Title"] = title
-        message["SubTitle"] = subtitle
-
-        # action
-        action = copy.deepcopy(ACTION_TEMPLATE)
-        action["JsonRPCAction"]["method"] = method
-        action["JsonRPCAction"]["parameters"] = value
-        message.update(action)
-
-        self.messages_queue.append(message)
+    def add_item(self, title: str, subtitle: str):
+        self.items.append({'Title': title, 'SubTitle': subtitle, 'IcoPath': ICON_PATH})
 
     @staticmethod
     def valid_lang(lang: str) -> bool:
@@ -55,16 +37,16 @@ class Main(FlowLauncher):
 
             for src in sources:
                 translation = translator.translate(query, src=src, dest=dest)
-                self.sendNormalMess(_(str(translation.text)), f"{src} → {dest}   {query}")
+                self.add_item(_(str(translation.text)), f"{src} → {dest}   {query}")
         except Exception as error:
-            self.sendNormalMess(_(str(error)), f"{src} → {dest}   {query}")
-        return self.messages_queue
+            self.add_item(_(str(error)), f"{src} → {dest}   {query}")
+        return self.items
 
     def help_action(self):
-        self.sendNormalMess("direct translate", _("<hotkey> <from language> <to language> <text>"))
-        return self.messages_queue
+        self.add_item("direct translate", _("<hotkey> <from language> <to language> <text>"))
+        return self.items
 
-    def query(self, param: str) -> List[dict]:
+    def query(self, param: str='') -> List[dict]:
         query = param.strip().lower()
         params = query.split(" ")
         if len(params) < 1 or len(params[0]) < 2: return self.help_action()
@@ -77,4 +59,4 @@ class Main(FlowLauncher):
             # 2 lang_codes: lang1 -> lang2
             return self.translate(params[0], params[1], " ".join(params[2:]))
         except IndexError:
-            self.help_action()
+            return self.help_action()
