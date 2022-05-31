@@ -6,66 +6,57 @@ from typing import List
 from flowlauncher import FlowLauncher
 
 from googletrans import Translator
+from googletrans.constants import LANGUAGES, SPECIAL_CASES
 from plugin.templates import *
 from plugin.extensions import _
+import locale
 
 
 class Main(FlowLauncher):
-    messages_queue = []
+    items = []
 
-    def sendNormalMess(self, title: str, subtitle: str):
-        message = copy.deepcopy(RESULT_TEMPLATE)
-        message["Title"] = title
-        message["SubTitle"] = subtitle
+    @staticmethod
+    def system_lang():
+        lang = locale.getdefaultlocale()
+        return lang[0][:2] if lang else "en"
 
-        self.messages_queue.append(message)
+    def add_item(self, title: str, subtitle: str):
+        self.items.append({'Title': title, 'SubTitle': subtitle, 'IcoPath': ICON_PATH})
 
-    def sendActionMess(self, title: str, subtitle: str, method: str, value: List):
-        # information
-        message = copy.deepcopy(RESULT_TEMPLATE)
-        message["Title"] = title
-        message["SubTitle"] = subtitle
+    @staticmethod
+    def valid_lang(lang: str) -> bool:
+        return lang in LANGUAGES or lang in SPECIAL_CASES
 
-        # action
-        action = copy.deepcopy(ACTION_TEMPLATE)
-        action["JsonRPCAction"]["method"] = method
-        action["JsonRPCAction"]["parameters"] = value
-        message.update(action)
+    def translate(self, src: str, dest: str, query: str):
+        try:
+            translator = Translator()
+            if src == "auto":
+                src = translator.detect(query).lang
+                sources = src if isinstance(src, list) else [src]
+            else: sources = [src]
 
-        self.messages_queue.append(message)
+            for src in sources:
+                translation = translator.translate(query, src=src, dest=dest)
+                self.add_item(_(str(translation.text)), f"{src} → {dest}   {query}")
+        except Exception as error:
+            self.add_item(_(str(error)), f"{src} → {dest}   {query}")
+        return self.items
 
-    def query(self, param: str) -> List[dict]:
-        query = param.strip()
+    def help_action(self):
+        self.add_item("direct translate", _("<hotkey> <from language> <to language> <text>"))
+        return self.items
 
-        query_modified = query.strip().lower()
-        splitted_params = query_modified.split(' ')
+    def query(self, param: str='') -> List[dict]:
+        query = param.strip().lower()
+        params = query.split(" ")
 
-        if len(splitted_params) > 1 and len(splitted_params[0]) == 2 and len(splitted_params[1]) != 2:
-            # There is only the destination lang: we can assume that the from lang is "auto"
-            query_modified = f"auto {query_modified}"
-            splitted_params = query_modified.split(' ')
-
-        if len(splitted_params) < 3:
-            self.sendNormalMess(
-                "Direct Translate",
-                _("<Hotkey> <From Language> <To Language> <Text>")
-            )
-        else:
-            from_lang = splitted_params[0]
-            to_lang = splitted_params[1]
-            
-            try:
-                translator = Translator()
-                translation = translator.translate(' '.join(splitted_params[2:]), src=from_lang, dest=to_lang)
-
-                self.sendNormalMess(
-                    _(str(translation.text)),
-                    query
-                )
-            except ValueError as error:
-                self.sendNormalMess(
-                    _(str(error)),
-                    query
-                ) 
-
-        return self.messages_queue
+        try:
+            if len(params) < 1 or len(params[0]) < 2 or not params[1]: return self.help_action()
+            # no lang_code: <auto> -> <system language>
+            if not self.valid_lang(params[0]): return self.translate("auto", self.system_lang(), query)
+            # one lang_code: <auto> -> lang_code
+            if not self.valid_lang(params[1]): return self.translate("auto", params[0], " ".join(params[1:]))
+            # 2 lang_codes: lang1 -> lang2
+            return self.translate(params[0], params[1], " ".join(params[2:]))
+        except IndexError:
+            return self.help_action()
